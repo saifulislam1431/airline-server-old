@@ -130,6 +130,12 @@ async function run() {
       const result = await flightsCollection.deleteOne(query);
       res.send(result);
     })
+    
+    app.post("/add-flights",async(req,res)=>{
+      const newFlight = req.body;
+      const result = await flightsCollection.insertOne(newFlight);
+      res.send(result)
+    })
 
 
 
