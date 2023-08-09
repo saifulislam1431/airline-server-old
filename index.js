@@ -30,6 +30,7 @@ async function run() {
 
     const flightsCollection = client.db("skyzen").collection("flights")
     const usersCollection = client.db("skyzen").collection("users")
+    const bookingCollection = client.db("skyzen").collection("bookings");
 
 // Flights API
     app.get("/all-flights",async(req,res)=>{
@@ -49,6 +50,25 @@ async function run() {
             const result = await usersCollection.insertOne(newUser)
         res.send(result)
         }
+
+    })
+
+    app.post("/bookings",async(req,res)=>{
+      const newBookings = req.body;
+      const result = await bookingCollection.insertOne(newBookings);
+      res.send(result);
+    })
+
+    app.get("/user-bookings",async(req,res)=>{
+      const email = req.query.email;
+      const user = await bookingCollection.findOne({email: email});
+      if(user){
+        const result = await bookingCollection.find({email: email}).toArray();
+        res.send(result)
+      }
+      else{
+        res.json("You don't have any bookings yet.")
+      }
 
     })
 
